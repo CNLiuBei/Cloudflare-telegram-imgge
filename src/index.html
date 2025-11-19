@@ -499,7 +499,13 @@
             }
             .image-table th,
             .image-table td {
+                padding: 0;
+            }
+            .image-table td:not(:last-child) {
                 padding: 8px 5px;
+            }
+            .image-table td:last-child {
+                padding: 0 5px;
             }
             /* 优化复选框列 */
             .image-table th:nth-child(1),
@@ -534,7 +540,11 @@
                 max-width: 180px;
                 word-break: break-all;
             }
-            .image-table th:nth-child(6),
+            .image-table th:nth-child(6) {
+                width: 140px;
+                text-align: right;
+                padding: 10px 5px;
+            }
             .image-table td:nth-child(6) {
                 width: 140px;
                 text-align: right;
@@ -629,9 +639,18 @@
             }
             .image-table th,
             .image-table td {
-                padding: 6px 3px;
+                padding: 0;
                 height: 61px;
                 box-sizing: border-box;
+            }
+            .image-table th {
+                padding: 6px 3px;
+            }
+            .image-table td:not(:last-child) {
+                padding: 6px 3px;
+            }
+            .image-table td:last-child {
+                padding: 0 3px;
             }
             .table-thumbnail {
                 width: 28px;
