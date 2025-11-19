@@ -203,7 +203,7 @@ npm run deploy
 
 ### 删除图片
 
-点击"删除"按钮（如配置了管理密码需先验证）
+点击"删除"按钮，确认后即可删除
 
 ---
 
@@ -223,9 +223,6 @@ npm run deploy
 
 ```toml
 [vars]
-# 管理密码（用于删除图片）
-ADMIN_PASSWORD = "your_password"
-
 # 允许的图片格式
 ALLOWED_TYPES = "image/jpeg,image/png,image/gif,image/webp"
 
@@ -300,7 +297,7 @@ git push
 ### 隐私安全
 - 图片存储在你的 Telegram 频道
 - 建议设置频道为私有
-- 可配置管理密码保护删除功能
+- 删除操作不可恢复，请谨慎操作
 
 ---
 

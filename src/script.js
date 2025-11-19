@@ -238,13 +238,11 @@ function showLinkModal(image) {
 async function deleteImage(id) {
     if (!confirm('确定要删除这张图片吗？')) return;
 
-    const password = prompt('请输入管理员密码（如果设置了）：');
-
     try {
         const response = await fetch(`${API_BASE}/api/delete`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ id, password })
+            body: JSON.stringify({ id })
         });
 
         const result = await response.json();
