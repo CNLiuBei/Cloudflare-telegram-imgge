@@ -312,7 +312,7 @@
             border-bottom: 2px solid var(--border);
         }
         .image-table td {
-            /* padding: 10px; */
+            padding: 10px;
             font-size: 12px;
             border-bottom: 1px solid var(--border);
             vertical-align: middle;
@@ -328,6 +328,12 @@
         .image-table input[type="checkbox"] {
             vertical-align: middle;
             margin: 0;
+            cursor: pointer;
+        }
+        /* 复选框单元格居中 */
+        .image-table td:first-child,
+        .image-table th:first-child {
+            text-align: center;
         }
         .table-thumbnail {
             width: 40px;
@@ -352,6 +358,8 @@
             justify-content: flex-end;
             align-items: center;
             vertical-align: middle;
+            height: 100%;
+            padding: 0;
         }
         .action-btn {
             padding: 8px 16px;
@@ -483,10 +491,10 @@
                 font-size: 11px;
                 width: 100%;
             }
-            /* .image-table th,
+            .image-table th,
             .image-table td {
                 padding: 8px 5px;
-            } */
+            }
             /* 优化复选框列 */
             .image-table th:nth-child(1),
             .image-table td:nth-child(1) {
@@ -614,7 +622,7 @@
             }
             .image-table th,
             .image-table td {
-                /* padding: 6px 3px; */
+                padding: 6px 3px;
                 height: 40px;
                 box-sizing: border-box;
             }
