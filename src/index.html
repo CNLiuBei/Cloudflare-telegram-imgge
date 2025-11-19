@@ -805,14 +805,77 @@
         }
 
         function initPaste() {
-            document.addEventListener('paste', (e) => {
-                const items = e.clipboardData.items;
-                for (let item of items) {
-                    if (item.type.indexOf('image') !== -1) {
-                        handleFiles([item.getAsFile()]);
+            document.addEventListener('paste', async (e) => {
+                // 防止默认粘贴行为（如果焦点在输入框）
+                const activeElement = document.activeElement;
+                if (activeElement.tagName !== 'INPUT' && activeElement.tagName !== 'TEXTAREA') {
+                    e.preventDefault();
+                }
+                
+                const clipboardData = e.clipboardData || e.originalEvent?.clipboardData || window.clipboardData;
+                
+                if (!clipboardData) {
+                    console.log('无法访问剪贴板数据');
+                    return;
+                }
+                
+                const items = clipboardData.items;
+                let hasImage = false;
+                
+                if (items) {
+                    // 标准方式（Chrome, Firefox, Safari）
+                    for (let item of items) {
+                        if (item.type.indexOf('image') !== -1) {
+                            hasImage = true;
+                            const file = item.getAsFile();
+                            if (file) {
+                                handleFiles([file]);
+                                showToast('📋 检测到粘贴图片');
+                            }
+                        }
+                    }
+                } else if (clipboardData.files && clipboardData.files.length > 0) {
+                    // 备用方式（旧版浏览器）
+                    const files = Array.from(clipboardData.files).filter(file => 
+                        file.type.startsWith('image/')
+                    );
+                    if (files.length > 0) {
+                        hasImage = true;
+                        handleFiles(files);
+                        showToast('📋 检测到粘贴图片');
                     }
                 }
+                
+                // Safari/iOS 特殊处理
+                if (!hasImage && navigator.clipboard && navigator.clipboard.read) {
+                    try {
+                        const clipboardItems = await navigator.clipboard.read();
+                        for (const clipboardItem of clipboardItems) {
+                            for (const type of clipboardItem.types) {
+                                if (type.startsWith('image/')) {
+                                    const blob = await clipboardItem.getType(type);
+                                    const file = new File([blob], `pasted-image-${Date.now()}.${type.split('/')[1]}`, { type });
+                                    handleFiles([file]);
+                                    showToast('📋 检测到粘贴图片');
+                                    hasImage = true;
+                                    break;
+                                }
+                            }
+                            if (hasImage) break;
+                        }
+                    } catch (err) {
+                        // 权限被拒绝或不支持
+                        console.log('Clipboard API 读取失败:', err);
+                    }
+                }
+                
+                if (!hasImage) {
+                    console.log('剪贴板中没有图片');
+                }
             });
+            
+            // 提示用户可以粘贴
+            console.log('✅ 粘贴上传已启用：可使用 Ctrl+V (Windows) 或 Cmd+V (Mac) 粘贴图片');
         }
 
         function handleFiles(files) {

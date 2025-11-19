@@ -13,7 +13,7 @@ const escapedHtml = htmlContent
   .replace(/\$/g, '\\$');
 
 // 读取 worker 模板
-const workerPath = path.join(__dirname, 'worker.js');
+const workerPath = path.join(__dirname, 'script.js');
 let workerContent = fs.readFileSync(workerPath, 'utf-8');
 
 // 检查是否需要内嵌 HTML
