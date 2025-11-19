@@ -312,12 +312,20 @@
             border-bottom: 2px solid var(--border);
         }
         .image-table td {
-            padding: 10px;
+            padding: 0;
             font-size: 12px;
             border-bottom: 1px solid var(--border);
             vertical-align: middle;
             height: 60px;
             box-sizing: border-box;
+        }
+        /* 除了操作列，其他列添加padding */
+        .image-table td:not(:last-child) {
+            padding: 10px;
+        }
+        /* 操作列无padding，让按钮容器填满 */
+        .image-table td:last-child {
+            padding: 0 10px;
         }
         .image-table tr:last-child td {
             border-bottom: none;
@@ -357,9 +365,8 @@
             gap: 8px;
             justify-content: flex-end;
             align-items: center;
-            vertical-align: middle;
-            height: 100%;
-            padding: 0;
+            min-height: 60px;
+            padding: 10px 0;
         }
         .action-btn {
             padding: 8px 16px;
