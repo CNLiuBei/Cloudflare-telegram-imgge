@@ -21,7 +21,8 @@
 - 📋 **多格式链接** - URL / Markdown / HTML / BBCode
 - 📊 **批量操作** - 批量复制、批量选择
 - 🔍 **搜索过滤** - 快速搜索文件名和标签
-- 🗑️ **图片管理** - 查看、删除已上传图片
+- 🗑️ **同步删除** - Web端删除自动同步删除TG消息
+- 🔒 **安全代理** - 图片URL不暴露Bot Token
 - 📱 **响应式设计** - 完美适配桌面端和移动端
 
 ### 💡 技术亮点
@@ -57,7 +58,10 @@
 <summary><b>2. 创建 Telegram 频道</b></summary>
 
 1. 创建一个私有频道（用于存储图片）
-2. 将 Bot 添加为频道管理员
+2. 将 Bot 添加为频道管理员，**确保赋予以下权限：**
+   - ✅ 发送消息（Post Messages）
+   - ✅ 编辑消息（Edit Messages）
+   - ✅ **删除消息（Delete Messages）** - 必需！用于同步删除
 3. 获取频道 ID：
    - 发消息到频道，访问 `https://api.telegram.org/bot你的token/getUpdates`
    - 或使用 [@userinfobot](https://t.me/userinfobot) 转发频道消息
@@ -255,6 +259,13 @@ npm run deploy
 
 点击"删除"按钮，确认后即可删除
 
+**同步删除：**
+- ✅ Web端删除记录
+- ✅ 自动删除Telegram频道消息
+- ✅ 数据完全同步，不留垃圾
+
+**注意：** Bot需要有频道的"删除消息"权限
+
 ---
 
 ## ⚙️ 配置说明
@@ -288,8 +299,15 @@ MAX_FILE_SIZE = "10485760"  # 10MB
 telegram-image-bed/
 ├── src/
 │   ├── index.html       # 前端页面
-│   ├── script.js        # 后端逻辑
+│   ├── script.js        # 前端逻辑
 │   └── build-worker.js  # 构建脚本
+├── functions/           # Cloudflare Pages Functions
+│   └── api/
+│       ├── upload.js    # 图片上传API
+│       ├── delete.js    # 图片删除API（含TG同步删除）
+│       ├── images.js    # 图片列表API
+│       ├── search.js    # 图片搜索API
+│       └── image/[id].js # 图片代理API（保护Token）
 ├── wrangler.toml        # Cloudflare 配置
 ├── package.json         # 项目配置
 └── README.md           # 项目说明
@@ -327,9 +345,10 @@ git push
 ## 🌟 技术栈
 
 - **前端**: HTML5 + CSS3 + Vanilla JavaScript
-- **后端**: Cloudflare Workers
+- **后端**: Cloudflare Pages Functions
 - **存储**: Telegram Bot API（图片）+ Cloudflare KV（元数据）
-- **部署**: Cloudflare Pages
+- **部署**: Cloudflare Pages（GitHub自动部署）
+- **CDN**: Cloudflare全球加速网络
 
 ---
 
@@ -347,7 +366,9 @@ git push
 ### 隐私安全
 - 图片存储在你的 Telegram 频道
 - 建议设置频道为私有
+- 图片URL不暴露Bot Token（通过代理API访问）
 - 删除操作不可恢复，请谨慎操作
+- Bot需要"删除消息"权限才能同步删除
 
 ---
 
