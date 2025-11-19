@@ -30,6 +30,7 @@
 - ✅ 全球加速 - Cloudflare CDN 网络分发
 - ✅ 无需服务器 - Serverless 架构
 - ✅ 自动构建 - GitHub 推送自动部署
+- ✅ 自定义域名 - 支持绑定个人域名
 
 ---
 
@@ -132,6 +133,55 @@
 ```
 https://你的项目名.pages.dev
 ```
+
+#### 第四步（可选）：绑定自定义域名
+
+<details>
+<summary>点击展开查看域名绑定步骤</summary>
+
+如果你有自己的域名，可以绑定到 Cloudflare Pages：
+
+**1. 添加自定义域名**
+
+在项目页面中：
+- 点击 `Custom domains` 标签
+- 点击 `Set up a custom domain`
+- 输入你的域名，例如：`img.yourdomain.com`
+
+**2. 配置 DNS**
+
+根据提示配置 DNS 记录，有两种方式：
+
+**方式 A：使用 Cloudflare DNS（推荐）**
+- 将域名的 Nameservers 指向 Cloudflare
+- Cloudflare 会自动配置所有记录
+- 自动启用 SSL/TLS
+
+**方式 B：使用其他 DNS 提供商**
+- 添加 CNAME 记录：
+  ```
+  类型: CNAME
+  名称: img (或你的子域名)
+  值: 你的项目名.pages.dev
+  ```
+- 如果是根域名，添加：
+  ```
+  类型: A
+  名称: @
+  值: Cloudflare 提供的 IP 地址
+  ```
+
+**3. 等待 DNS 生效**
+- 通常需要几分钟到几小时
+- Cloudflare 会自动签发 SSL 证书
+- 完成后可以通过自定义域名访问
+
+**4. 设置域名重定向（可选）**
+- 在 `Custom domains` 中可以设置：
+  - www 重定向到非 www
+  - HTTP 自动跳转到 HTTPS
+
+</details>
 
 ---
 
