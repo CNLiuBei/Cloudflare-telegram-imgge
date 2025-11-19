@@ -66,9 +66,9 @@ export async function onRequestPost(context) {
     const timestamp = Date.now();
 
     // 构建代理 URL（不暴露 Bot Token）
-    // 优先使用自定义域名，如果没有配置则使用当前请求域名
-    const customDomain = env.CUSTOM_DOMAIN || 'img.liubei.org';
-    const imageUrl = `https://${customDomain}/api/image/${imageId}`;
+    // 自动使用当前请求的域名（支持 pages.dev 和自定义域名）
+    const url = new URL(request.url);
+    const imageUrl = `${url.protocol}//${url.host}/api/image/${imageId}`;
 
     // 保存到 KV
     const imageData = {
