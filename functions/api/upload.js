@@ -59,36 +59,31 @@ export async function onRequestPost(context) {
     const photo = telegramResult.result.photo;
     const largestPhoto = photo[photo.length - 1];
     const fileId = largestPhoto.file_id;
-
-    // 获取文件路径
-    const fileResponse = await fetch(
-      `https://api.telegram.org/bot${BOT_TOKEN}/getFile?file_id=${fileId}`
-    );
-    const fileResult = await fileResponse.json();
-
-    if (!fileResult.ok) {
-      return new Response(JSON.stringify({ success: false, error: '获取文件信息失败' }), {
-        headers: { 'Content-Type': 'application/json' }
-      });
-    }
-
-    const fileUrl = `https://api.telegram.org/file/bot${BOT_TOKEN}/${fileResult.result.file_path}`;
+    const messageId = telegramResult.result.message_id;
 
     // 生成唯一 ID
     const imageId = generateId();
     const timestamp = Date.now();
 
+    // 构建代理 URL（不暴露 Bot Token）
+    // 优先使用自定义域名，如果没有配置则使用当前请求域名
+    const customDomain = env.CUSTOM_DOMAIN || 'img.liubei.org';
+    const imageUrl = `https://${customDomain}/api/image/${imageId}`;
+
     // 保存到 KV
     const imageData = {
       id: imageId,
-      url: fileUrl,
+      url: imageUrl,
       filename: file.name,
       size: file.size,
       type: file.type,
-      telegramFileId: fileId,
       uploadTime: timestamp,
       tags: tags ? tags.split(',').map(t => t.trim()) : [],
-      folder: folder
+      folder: folder,
+      telegram: {
+        fileId: fileId,
+        messageId: messageId
+      }
     };
 
     await env.IMAGE_DB.put(imageId, JSON.stringify(imageData));
